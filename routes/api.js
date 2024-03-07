@@ -5,38 +5,51 @@ import Model from '../models/Model.js';
 
 const router = Router();
 
-const checkCache = async (_, res,) => {
+const checkCache = async (req, res, next) => {
 	try {
-		// Find cached data in the database
-		const cachedData = await Model.findOne();
-
-		// If cached data exists and its last updated time is within 15 seconds
+		const cachedData = await Model.findOne({sport: req.params.sport, gameId: req.params.gameId});
 		if (cachedData && Date.now() - cachedData.lastUpdated.getTime() < 15000) {
-			// Return cached data
-			res.json(cachedData.data);
-		} else {
-			// Fetch fresh data from the feed
-			const response = await axios.get('https://chumley.barstoolsports.com/dev/data/games/6c974274-4bfc-4af8-a9c4-8b926637ba74.json');
-			const freshData = response.data;
-
-			// Update or create cached data in the database
-			if (cachedData) {
-				cachedData.data = freshData;
-				cachedData.lastUpdated = new Date();
-				await cachedData.save();
-			} else {
-				await Model.create({data: freshData, lastUpdated: new Date()});
-			}
-
-			// Return fresh data
-			res.json(freshData);
+			console.log('\nSending game data from cache.');
+			return res.json(cachedData.data);
 		}
-	} catch (err) {
-		console.error('Error:', err);
-		res.status(500).send('Server Error');
+		console.log('\nCache game data not found or expired; fetching fresh game data.');
+		return next();
+	} catch (e) {
+		console.error('Error:', e);
+		res.status(500).send('Server Error!');
 	}
 };
-// GET all items
-router.get('/data', checkCache);
+
+const fetchFreshData = async (req, res) => {
+	try {
+		const [cachedData, response] = await Promise.all([
+			Model.findOne({sport: req.params.sport, gameId: req.params.gameId}),
+			axios.get(`https://chumley.barstoolsports.com/dev/data/games/${req.params.gameId}.json`)
+		]);
+		const freshData = response.data;
+
+		if (cachedData) {
+			console.log('Updating cache.');
+			cachedData.data = freshData;
+			cachedData.lastUpdated = new Date();
+			await cachedData.save();
+		} else {
+			console.log('Inserting into cache.');
+			await Model.create({
+				sport: req.params.sport,
+				gameId: req.params.gameId,
+				data: freshData,
+				lastUpdated: new Date()
+			});
+		}
+		console.log('Sending fresh game data.');
+		return res.json(freshData);
+	} catch (e) {
+		console.error('Error:', e);
+		res.status(500).send('Server Error!');
+	}
+};
+
+router.get('/:sport/:gameId', checkCache, fetchFreshData);
 
 export default router;

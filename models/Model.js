@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
 
-const modelSchema = new mongoose.Schema({
-	data: Object,
-	lastUpdated: Date
-	// Add more fields as needed
-});
-
-const Model = mongoose.model('Model', modelSchema);
+const Model = mongoose.model(
+	'Model',
+	new mongoose.Schema({
+		sport: String,
+		gameId: String,
+		data: Object,
+		lastUpdated: Date
+	})
+);
 
 export default Model;

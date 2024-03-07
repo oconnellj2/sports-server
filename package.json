@@ -7,17 +7,12 @@
     "email": "jdoconnell@pm.me",
     "url": "https://github.com/oconnellj2"
   },
-  "description": "Node.js server for serving APIs",
+  "description": "Node.js server for serving box scores",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": [
-    "node",
-    "express",
-    "mongodb"
-  ],
   "dependencies": {
     "axios": "^1.6.7",
     "cors": "^2.8.5",

@@ -11,7 +11,7 @@ connect('mongodb://localhost:27017/myDatabase')
 	.then(() => console.log('MongoDB connected'))
 	.catch(e => console.error('MongoDB connection error:', e));
 
-// Define routes.
+// Define context root.
 app.use('/box-score', router);
 // Start server.
-app.listen(PORT, () => console.log(`Running on port: ${PORT}`));
+app.listen(PORT, () => console.log(`Running on port: ${PORT}\nAccess via: http://localhost:3000/box-score/:sport/:gameId`));
