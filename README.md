@@ -51,8 +51,7 @@ http://localhost:4000
 
 <details>
 <summary>Click to expand</summary>
-```json
-{
+<pre><code class="language-json">{
   "league": String, // MLB | NBA ...
   "away_team": {
     // Details about the away team
@@ -74,8 +73,7 @@ http://localhost:4000
   "home_totals": {
     // Total statistics for the home team
   }
-}
-```
+}</code></pre>
 </details>
 
 #### Example Usage
