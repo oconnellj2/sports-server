@@ -51,7 +51,7 @@ http://localhost:4000
 
 <details>
 <summary>Click to expand</summary>
-<pre>
+```json
 {
   "league": String, // MLB | NBA ...
   "away_team": {
@@ -76,7 +76,6 @@ http://localhost:4000
   }
 }
 ```
-</pre>
 </details>
 
 #### Example Usage
