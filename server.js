@@ -4,7 +4,7 @@ import {connect} from 'mongoose';
 import router from './routes/api.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 // Connect to MongoDB.
 connect('mongodb://localhost:27017/myDatabase')
@@ -14,4 +14,4 @@ connect('mongodb://localhost:27017/myDatabase')
 // Define context root.
 app.use('/box-score', router);
 // Start server.
-app.listen(PORT, () => console.log(`Running on port: ${PORT}\nAccess via: http://localhost:3000/box-score/:sport/:gameId`));
+app.listen(PORT, () => console.log(`Access via: http://localhost:${PORT}/box-score/:sport/:gameId`));
